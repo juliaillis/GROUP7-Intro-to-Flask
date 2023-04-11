@@ -1,8 +1,9 @@
 {% include "header.html" %}
         <h1>Branches</h1>
-        <ul>
+        <table>
+                <tr><th>Branch Name</th></tr>
                 {% for branches in branch_list %}
-                <tr><td><a href="branchdetails?code={{branches["code"]}}">{{branches["code"]}}</a></td><td>{{branches["name"]}}</td><td>{{branches["phonenumber"]}}</td></tr>
+                <tr><td><a href="branchdetails?code={{branches["code"]}}">{{branches["name"]}}</a></td><td>{{branches["phonenumber"]}}</td></tr>
                 {% endfor %}
-        </ul>
+        </table>
 {% include "footer.html" %}
