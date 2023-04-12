@@ -59,7 +59,8 @@ def auth():
         session["user"] = user
         return redirect('/')
     else:
-        return redirect('/login')
+        error = "Invalid username or password. Please try again."
+        return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
@@ -91,3 +92,12 @@ def addtocart():
 def cart():
     return render_template('cart.html')
 
+@app.route('/updatecart', methods=['POST'])
+def update_cart():
+    cart = session.get("cart", {})
+    for code, item in cart.items():
+        new_qty = int(request.form.get(f"{code}-qty"))
+        cart[code]["qty"] = new_qty
+        cart[code]["subtotal"] = cart[code]["price"] * new_qty
+    session["cart"] = cart
+    return redirect('/cart')

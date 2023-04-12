@@ -1,16 +1,27 @@
 {% include "header.html" %}
-        <h1>Cart</h1>
+<h1>Cart</h1>
 
-            {% if session["cart"] is defined %}
-            <table>
+{% if session["cart"] is defined %}
+    <form method="post" action="{{ url_for('update_cart') }}">
+        <table>
             <tr><th>Name</th><th>Quantity</th><th>Subtotal</th></tr>
-            {% for item in session["cart"].values() %}
-                        <tr><td>{{ item["name"] }}</td><td>{{ item["qty"] }}</td><td>{{ item["subtotal"] }}</td></tr>
+            {% for code, item in session["cart"].items() %}
+                <tr>
+                    <td>{{ item["name"] }}</td>
+                    <td>
+                        <input type="number" name="{{ code }}-qty" min="1" value="{{ item['qty'] }}" required>
+                        <input type="hidden" name="{{ code }}-name" value="{{ item['name'] }}">
+                        <input type="hidden" name="{{ code }}-price" value="{{ item['subtotal']/item['qty'] }}">
+                    </td>
+                    <td>{{ item["subtotal"] }}</td>
+                </tr>
             {% endfor %}
             <tr><td colspan=2><b>Total</b></td><td><b>{{ session["cart"].values()|sum(attribute="subtotal") }}</b></td></tr>
-            </table>
-            {% else %}
-            <div>Your cart is empty</div>
-            {% endif %}
+        </table>
+        <input type="submit" value="Update Cart">
+    </form>
+{% else %}
+    <div>Your cart is empty</div>
+{% endif %}
 
 {% include "footer.html" %}
